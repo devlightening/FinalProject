@@ -11,5 +11,6 @@ namespace Core.Utilities.Security.JWT
     {
         AccessToken CreateToken(User user, List<OperationClaim> operationClaims);
 
+
     }
 }
