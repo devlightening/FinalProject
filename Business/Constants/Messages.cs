@@ -22,7 +22,7 @@ namespace Business.Constants
         public static string PasswordError = "Wrong password!";
         public static string SuccessfulLogin = "Successful Login.";
         public static string UserAlreadyExists = "User available.";
-        public static string AccessTokenCreated = "Access token created";
+        public static string AccessTokenCreated = "Token is created";
 
     }
 }
