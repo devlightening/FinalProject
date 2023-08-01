@@ -4,6 +4,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
+using Autofac.Core;
 using Core.Entities.Concrete;
 using Core.Extensions;
 using Core.Utilities.Security.Encryption;
