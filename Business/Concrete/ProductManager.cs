@@ -21,48 +21,38 @@ namespace Business.Concrete
             _productDal = productDal;
             _categoryService = categoryService;
         }
-
-        //Claim     
+        //Claim
         [SecuredOperation("product.add,admin")]
         [ValidationAspect(typeof(ProductValidator))]
         public IResult Add(Product product)
         {
-            //Polyformism:
-            IResult result = BusinessRules.Run(CheckIfProductExists(product.ProductName),
-               CheckIfProductCountOfCategoryCorrect(product.CategoryId),
-               CheckIfCategoryLimitExciteded());
-            if (result!=null)
+
+            //Aynı isimde ürün eklenemez
+            //Eğer mevcut kategori sayısı 15'i geçtiyse sisteme yeni ürün eklenemez. ve 
+            IResult result = BusinessRules.Run(CheckIfProductNameExists(product.ProductName),
+                CheckIfProductCountOfCategoryCorrect(product.CategoryId), CheckIfCategoryLimitExceded());
+
+            if (result != null)
             {
                 return result;
             }
-            //business codes
+
             _productDal.Add(product);
+
             return new SuccessResult(Messages.ProductAdded);
 
-            /* 
-             ValidationTool.Validate(new ProductValidator(), product); ======> [ValidationAspect(typeof(ProductValidator))]28
-             Validation codes
-             if (product.UnitPrice <= 0)
-             {
-                 return new ErrorResult(Messages.UnitPriceInvalid);
-             }
-             if (product.ProductName.Length < 2)
-             {
-                 //magic strings 
-                 return new ErrorResult(Messages.ProductNameInvalid);
-             }
-            */
         }
+
+
+        //[CacheAspect] //key,value
         public IDataResult<List<Product>> GetAll()
         {
-            //İş kodları
-            //Yetkisi var mı?
-
-            if (DateTime.Now.Hour == 22)
+            if (DateTime.Now.Hour == 1)
             {
                 return new ErrorDataResult<List<Product>>(Messages.MaintenanceTime);
             }
-            return new SuccessDataResult<List<Product>>(_productDal.GetAll(),Messages.ProductListed);
+
+            return new SuccessDataResult<List<Product>>(_productDal.GetAll(), Messages.ProductsListed);
         }
 
         public IDataResult<List<Product>> GetAllByCategoryId(int id)
@@ -72,32 +62,47 @@ namespace Business.Concrete
 
         public IDataResult<Product> GetById(int productId)
         {
-            return new SuccessDataResult<Product>(_productDal.Get(p=>p.ProductId == productId));
+            return new SuccessDataResult<Product>(_productDal.Get(p => p.ProductId == productId));
         }
 
         public IDataResult<List<Product>> GetByUnitPrice(decimal min, decimal max)
         {
-            return new SuccessDataResult<List<Product>>(_productDal.GetAll
-                (p => p.UnitPrice >= min && p.UnitPrice <= max));
+            return new SuccessDataResult<List<Product>>(_productDal.GetAll(p => p.UnitPrice >= min && p.UnitPrice <= max));
         }
 
         public IDataResult<List<ProductDetailDto>> GetProductDetails()
         {
-            return new SuccessDataResult <List<ProductDetailDto>>(_productDal.GetProductDetails());
+            if (DateTime.Now.Hour == 23)
+            {
+                return new ErrorDataResult<List<ProductDetailDto>>(Messages.MaintenanceTime);
+            }
+            return new SuccessDataResult<List<ProductDetailDto>>(_productDal.GetProductDetails());
         }
+
+        [ValidationAspect(typeof(ProductValidator))]
+        public IResult Update(Product product)
+        {
+            var result = _productDal.GetAll(p => p.CategoryId == product.CategoryId).Count;
+            if (result >= 10)
+            {
+                return new ErrorResult(Messages.ProductCountOfCategoryError);
+            }
+            throw new NotImplementedException();
+        }
+
         private IResult CheckIfProductCountOfCategoryCorrect(int categoryId)
         {
-            //select count(*) from products where categoryId=1
-            var result = _productDal.GetAll(p=>p.CategoryId==categoryId).Count;
-            if (result >=10) 
+            //Select count(*) from products where categoryId=1
+            var result = _productDal.GetAll(p => p.CategoryId == categoryId).Count;
+            if (result >= 15)
             {
-                return new ErrorResult(Messages.ProductCountOfCategory);
+                return new ErrorResult(Messages.ProductCountOfCategoryError);
             }
             return new SuccessResult();
         }
-        private IResult CheckIfProductExists(string productName)
+
+        private IResult CheckIfProductNameExists(string productName)
         {
-            //select count(*) from products where categoryId=1
             var result = _productDal.GetAll(p => p.ProductName == productName).Any();
             if (result)
             {
@@ -105,24 +110,17 @@ namespace Business.Concrete
             }
             return new SuccessResult();
         }
-        private IResult CheckIfCategoryOf(string productName)
-        {
-            //select count(*) from products where categoryId=1
-            var result = _productDal.GetAll(p => p.ProductName == productName).Any();
-            if (result)
-            {
-                return new ErrorResult(Messages.ProductNameAlreadyExists);
-            }
-            return new SuccessResult();
-        }
-        private IResult CheckIfCategoryLimitExciteded()
+
+        private IResult CheckIfCategoryLimitExceded()
         {
             var result = _categoryService.GetAll();
-            if (result.Data.Count>15)
+            if (result.Data.Count > 15)
             {
                 return new ErrorResult(Messages.CategoryLimitExciteded);
             }
+
             return new SuccessResult();
         }
+
     }
 }

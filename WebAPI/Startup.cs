@@ -1,10 +1,10 @@
-﻿using Core.Utilities.Security.Encryption;
+﻿using Core.DependencyResolvers;
+using Core.Utilities.IoC;
+using Core.Utilities.Security.Encryption;
 using Core.Utilities.Security.JWT;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Core.Extension;
-using Core.Utilities.IoC;
-using Core.DependencyResolvers;
 
 namespace WebAPI
 {
@@ -28,7 +28,7 @@ namespace WebAPI
             //services.AddSingleton<IProductService,ProductManager>();
             //services.AddSingleton<IProductDal, EfProductDal>();
 
-          
+
 
             var tokenOptions = Configuration.GetSection("TokenOptions").Get<TokenOptions>();
 
@@ -47,9 +47,9 @@ namespace WebAPI
                     };
                 });
 
-            services.AddDependencyResolvers(new ICoreModule[]{
-                 new CoreModule()
-             });
+            services.AddDependencyResolvers(new ICoreModule[] {
+               new CoreModule()
+            });
 
         }
 
