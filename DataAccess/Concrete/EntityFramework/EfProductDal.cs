@@ -29,7 +29,7 @@ namespace DataAccess.Concrete.EntityFramework
                                  UnitsInStock = p.UnitsInStock
                              };
                 return result.ToList();
-            };
+            }
         }
     }
 }
