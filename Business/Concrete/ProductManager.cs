@@ -35,18 +35,15 @@ namespace Business.Concrete
             {
                 return result;
             }
-
             _productDal.Add(product);
-
             return new SuccessResult(Messages.ProductAdded);
-
         }
 
-
+        
         //[CacheAspect] //key,value
         public IDataResult<List<Product>> GetAll()
         {
-            if (DateTime.Now.Hour == 15)
+            if (DateTime.Now.Hour ==16 )
             {
                 return new ErrorDataResult<List<Product>>(Messages.MaintenanceTime);
             }
@@ -73,7 +70,7 @@ namespace Business.Concrete
 
         public IDataResult<List<ProductDetailDto>> GetProductDetails()
         {
-            if (DateTime.Now.Hour == 23)
+            if (DateTime.Now.Hour == 22)
             {
                 return new ErrorDataResult<List<ProductDetailDto>>(Messages.MaintenanceTime);
             }
