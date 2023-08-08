@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Core.Utilities.Business
 {
-    public class BusinessRules
+    public  class BusinessRules
     {
         public static IResult Run(params IResult[] logics)
         {
@@ -17,6 +17,7 @@ namespace Core.Utilities.Business
                 {
                     return logic;
                 }
+
             }
             return null;
         }

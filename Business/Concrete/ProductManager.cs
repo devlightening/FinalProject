@@ -2,34 +2,45 @@
 using Business.BusinessAspects.Autofac;
 using Business.Constants;
 using Business.ValidationRules.FluentValidation;
+using Core.Aspects.Autofac.Caching;
+using Core.Aspects.Autofac.Performance;
+using Core.Aspects.Autofac.Transaction;
 using Core.Aspects.Autofac.Validation;
 using Core.Utilities.Business;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using Entities.DTOs;
+using System.Net.Http.Headers;
 
 namespace Business.Concrete
 {
     public class ProductManager : IProductService
+
     {
+        //validation=it is givin validate... it is giving the message to us to doing something.email or something...
+        //construction injection...! //we didnt use Entities framwork just we are using with constructers...!
         IProductDal _productDal;
         ICategoryService _categoryService;
+
+
 
         public ProductManager(IProductDal productDal, ICategoryService categoryService)
         {
             _productDal = productDal;
             _categoryService = categoryService;
-        }
 
-        //Claim
-        [SecuredOperation("product.add,admin")]
+
+        }
+        //[SecuredOperation("product.add,admin")]
         [ValidationAspect(typeof(ProductValidator))]
         //[CacheRemoveAspect("IProductService.Get")]
+
         public IResult Add(Product product)
         {
-            IResult result = BusinessRules.Run(CheckIfProductNameExists(product.ProductName),
-                CheckIfProductCountOfCategoryCorrect(product.CategoryId), CheckIfCategoryLimitExceded());
+            //same name can not add...
+            IResult result = BusinessRules.Run(CheckIfProductCountOfCategoryCorrect(product.CategoryId),
+                 CheckifProductNameExists(product.ProductName), CheckIfCategoryLimitExceded());
 
             if (result != null)
             {
@@ -37,18 +48,25 @@ namespace Business.Concrete
             }
             _productDal.Add(product);
             return new SuccessResult(Messages.ProductAdded);
-        }
 
-        
-        //[CacheAspect] //key,value
+            //business codes...
+
+
+
+
+        }
+        [CacheAspect]
         public IDataResult<List<Product>> GetAll()
         {
-            if (DateTime.Now.Hour ==16 )
+            //Business Codes like if statements..!
+            //do you have the authority ?
+            if (DateTime.Now.Hour == 1)
             {
-                return new ErrorDataResult<List<Product>>(Messages.MaintenanceTime);
+                return new ErrorDataResult<List<Product>>(Messages.MaintainanceTime);
             }
 
             return new SuccessDataResult<List<Product>>(_productDal.GetAll(), Messages.ProductsListed);
+
         }
 
         public IDataResult<List<Product>> GetAllByCategoryId(int id)
@@ -56,8 +74,8 @@ namespace Business.Concrete
             return new SuccessDataResult<List<Product>>(_productDal.GetAll(p => p.CategoryId == id));
         }
 
-       // [CacheAspect]
-        //[PerformanceAspect(5)]
+        [CacheAspect]
+        [PerformanceAspect(5)]
         public IDataResult<Product> GetById(int productId)
         {
             return new SuccessDataResult<Product>(_productDal.Get(p => p.ProductId == productId));
@@ -65,42 +83,42 @@ namespace Business.Concrete
 
         public IDataResult<List<Product>> GetByUnitPrice(decimal min, decimal max)
         {
-            return new SuccessDataResult<List<Product>>(_productDal.GetAll(p => p.UnitPrice >= min && p.UnitPrice <= max));
+            return new SuccessDataResult<List<Product>>(_productDal.GetAll(p => p.UnitPrice >= min
+            && p.UnitPrice <= max));
         }
 
-        public IDataResult<List<ProductDetailDto>> GetProductDetails()
+        public IDataResult<List<ProductDetailDto>> GetProductDetail()
         {
-            if (DateTime.Now.Hour == 22)
-            {
-                return new ErrorDataResult<List<ProductDetailDto>>(Messages.MaintenanceTime);
-            }
             return new SuccessDataResult<List<ProductDetailDto>>(_productDal.GetProductDetails());
         }
 
-        [ValidationAspect(typeof(ProductValidator))]
-        //[CacheRemoveAspect("IProductService.Get")]
+        //if memory include the all Get in IProductService class,CacheRemovaAspect will remove from memory.
+        [CacheRemoveAspect("IProductService.Get")]
         public IResult Update(Product product)
         {
-            var result = _productDal.GetAll(p => p.CategoryId == product.CategoryId).Count;
-            if (result >= 10)
+            var result = _productDal.GetAll(p => p.CategoryId == product.CategoryId).Count();
+            if (result <= 10)
             {
-                return new ErrorResult(Messages.ProductCountOfCategoryError);
+                _productDal.Update(product);
+                return new SuccessResult(Messages.ProductUpdated);
             }
-            throw new NotImplementedException();
+
+            return new ErrorResult(Messages.ProductCountCategoryError);
+
         }
 
         private IResult CheckIfProductCountOfCategoryCorrect(int categoryId)
         {
-            //Select count(*) from products where categoryId=1
-            var result = _productDal.GetAll(p => p.CategoryId == categoryId).Count;
-            if (result >= 15)
+            var result = _productDal.GetAll(p => p.CategoryId == categoryId).Count();
+            if (result > 15)
             {
-                return new ErrorResult(Messages.ProductCountOfCategoryError);
+                return new ErrorResult(Messages.ProductCountCategoryError);
             }
             return new SuccessResult();
+
         }
 
-        private IResult CheckIfProductNameExists(string productName)
+        private IResult CheckifProductNameExists(string productName)
         {
             var result = _productDal.GetAll(p => p.ProductName == productName).Any();
             if (result)
@@ -108,32 +126,30 @@ namespace Business.Concrete
                 return new ErrorResult(Messages.ProductNameAlreadyExists);
             }
             return new SuccessResult();
+
         }
 
         private IResult CheckIfCategoryLimitExceded()
         {
             var result = _categoryService.GetAll();
-            if (result.Data.Count > 15)
+            if (result.Data.Count > 40)
             {
-                return new ErrorResult(Messages.CategoryLimitExciteded);
+                return new ErrorResult(Messages.CategoryLimitExceded);
             }
-
             return new SuccessResult();
-        }
 
-        //[TransactionScopeAspect]
+        }
+        [TransactionScopeAspect]
         public IResult AddTransactionalTest(Product product)
         {
-
             Add(product);
             if (product.UnitPrice < 10)
             {
-                throw new Exception("");
+                throw new Exception(" ");
             }
-
             Add(product);
-
             return null;
         }
     }
 }
+

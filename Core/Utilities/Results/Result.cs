@@ -8,18 +8,25 @@ namespace Core.Utilities.Results
 {
     public class Result : IResult
     {
+    
+        //this =means use the succes work both work them...
 
-        public Result(bool success, string message):this(success)
+        public Result(bool succes, string message):this(succes)
         {
-           Message = message;
+            Message = message;
+           
+
         }
-        public Result(bool success)
+        //we are doing the overloading... to use both method we dont want to message like that.
+        public Result(bool succes)
         {
-            Success = success;      
+            Success = succes;
+
         }
 
         public bool Success { get; }
 
         public string Message { get; }
+
     }
 }
