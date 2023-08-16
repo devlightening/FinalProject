@@ -4,13 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Business.CCS
+namespace Business.CSS
 {
     public class FileLogger : ILogger
     {
         public void Log()
         {
-            Console.WriteLine("Dosya Loglandı");
+            Console.WriteLine("File was Logged..!");
+
         }
     }
 

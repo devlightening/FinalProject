@@ -23,12 +23,6 @@ namespace DataAccess.Concrete.InMemory
                 new Product{ProductId=5, CategoryId=2, ProductName="Fare", UnitPrice=85, UnitsInStock=1}
             };
         }
-
-        public InMemoryProductDal(List<Product> products)
-        {
-            _products = products;
-        }
-
         public void Add(Product product)
         {
             _products.Add(product);

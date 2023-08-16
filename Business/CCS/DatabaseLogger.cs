@@ -1,10 +1,11 @@
-﻿namespace Business.CCS
+﻿namespace Business.CSS
 {
-    public class DatabaseLogger : ILogger
+    public class DataBaseLogger : ILogger
     {
         public void Log()
         {
-            Console.WriteLine("Dosya Loglandı");
+            Console.WriteLine("Database was Logged..!");
+
         }
     }
 

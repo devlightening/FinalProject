@@ -6,10 +6,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Core.Extension
+namespace Core.Extensions
 {
-    public static  class ServiceCollectionExtensions
+    public static class ServiceCollectionExtensions
     {
+        //we are extending them with this.
         public static IServiceCollection AddDependencyResolvers
             (this IServiceCollection serviceCollection, ICoreModule[] modules)
         {
@@ -19,5 +20,6 @@ namespace Core.Extension
             }
             return ServiceTool.Create(serviceCollection);
         }
+
     }
 }

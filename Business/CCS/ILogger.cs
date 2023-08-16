@@ -4,11 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Business.CCS
+namespace Business.CSS
 {
     public interface ILogger
     {
         void Log();
-
     }
 }

@@ -29,11 +29,13 @@ namespace Business.Concrete
         {
             _productDal = productDal;
             _categoryService = categoryService;
-        }
 
+
+        }
         //[SecuredOperation("product.add,admin")]
         [ValidationAspect(typeof(ProductValidator))]
         //[CacheRemoveAspect("IProductService.Get")]
+
         public IResult Add(Product product)
         {
             //same name can not add...
@@ -48,6 +50,9 @@ namespace Business.Concrete
             return new SuccessResult(Messages.ProductAdded);
 
             //business codes...
+
+
+
 
         }
         [CacheAspect]

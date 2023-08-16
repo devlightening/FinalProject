@@ -1,6 +1,4 @@
 ﻿using Core.DataAccess;
-using Core.DataAccess.EntityFramework;
-using DataAccess.Concrete.EntityFramework;
 using Entities.Concrete;
 using System;
 using System.Collections.Generic;
@@ -10,12 +8,12 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Abstract
 {
-    public interface ICategoryDal : IEntityRepository<Category>
+    public interface ICategoryDal : IEntityRepository<Category> //you configured IEntityRepositroy with Category then we are taking directliy methods...!
     {
-   
 
     }
 }
+
 
 
 //List<Category> GetAll();
