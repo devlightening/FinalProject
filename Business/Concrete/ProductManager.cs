@@ -2,8 +2,8 @@
 using Business.BusinessAspects.Autofac;
 using Business.Constants;
 using Business.ValidationRules.FluentValidation;
+using Core.Aspects.Autofac.Performance;
 using Core.Aspects.Caching;
-using Core.Aspects.Performance;
 using Core.Aspects.Transaction;
 using Core.Aspects.Validation;
 using Core.Utilities.Business;
