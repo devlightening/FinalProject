@@ -7,14 +7,13 @@ namespace Core.CrossCuttingConcerns.Caching.Microsoft
 {
     public class MemoryCacheManager : ICacheManager
     {
-        //Adapter Pattern
+        //Adapter  
         IMemoryCache _memoryCache;
 
         public MemoryCacheManager()
         {
             _memoryCache = ServiceTool.ServiceProvider.GetService<IMemoryCache>();
         }
-
 
         public void Add(string key, object value, int duration)
         {
@@ -39,7 +38,6 @@ namespace Core.CrossCuttingConcerns.Caching.Microsoft
         public void Remove(string key)
         {
             _memoryCache.Remove(key);
-
         }
 
         public void RemoveByPattern(string pattern)

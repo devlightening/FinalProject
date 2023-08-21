@@ -7,9 +7,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
 
-namespace Core.Aspects.Autofac.Transaction
+namespace Core.Aspects.Transaction
 {
-     public class TransactionScopeAspect : MethodInterception
+    public class TransactionScopeAspect : MethodInterception
     {
         public override void Intercept(IInvocation invocation)
         {
@@ -20,7 +20,7 @@ namespace Core.Aspects.Autofac.Transaction
                     invocation.Proceed();
                     transactionScope.Complete();
                 }
-                catch (System.Exception e)
+                catch (Exception e)
                 {
                     transactionScope.Dispose();
                     throw;

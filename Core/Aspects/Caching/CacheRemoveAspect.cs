@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Text;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Core.Aspects.Autofac.Caching
+namespace Core.Aspects.Caching
 {
     public class CacheRemoveAspect : MethodInterception
     {

@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Core.Aspects.Autofac.Validation
+namespace Core.Aspects.Validation
 {
     public class ValidationAspect : MethodInterception //Aspect
     {
@@ -17,7 +17,7 @@ namespace Core.Aspects.Autofac.Validation
             //defensive coding
             if (!typeof(IValidator).IsAssignableFrom(validatorType))
             {
-                throw new System.Exception("it is not validation class..!");
+                throw new Exception("it is not validation class..!");
             }
 
             _validatorType = validatorType;

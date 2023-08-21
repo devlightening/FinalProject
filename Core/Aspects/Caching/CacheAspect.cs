@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Core.Aspects.Autofac.Caching
+namespace Core.Aspects.Caching
 {
     public class CacheAspect : MethodInterception
     {

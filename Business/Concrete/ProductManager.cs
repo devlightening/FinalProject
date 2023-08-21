@@ -2,16 +2,15 @@
 using Business.BusinessAspects.Autofac;
 using Business.Constants;
 using Business.ValidationRules.FluentValidation;
-using Core.Aspects.Autofac.Caching;
-using Core.Aspects.Autofac.Performance;
-using Core.Aspects.Autofac.Transaction;
-using Core.Aspects.Autofac.Validation;
+using Core.Aspects.Caching;
+using Core.Aspects.Performance;
+using Core.Aspects.Transaction;
+using Core.Aspects.Validation;
 using Core.Utilities.Business;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using Entities.DTOs;
-using System.Net.Http.Headers;
 
 namespace Business.Concrete
 {
@@ -55,7 +54,7 @@ namespace Business.Concrete
 
 
         }
-        [CacheAspect]
+        [CacheAspect]  //KEY ,VALUE
         public IDataResult<List<Product>> GetAll()
         {
             //Business Codes like if statements..!
