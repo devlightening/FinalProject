@@ -1,7 +1,6 @@
 ﻿using Business.Abstract;
 using Entities.DTOs;
 using Microsoft.AspNetCore.Mvc;
-
 namespace WebAPI.Controllers
 {
     [Route("api/[controller]")]
