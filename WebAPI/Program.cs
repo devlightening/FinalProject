@@ -59,18 +59,19 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    app.UseDeveloperExceptionPage();
 }
 
 app.ConfigureCustomExceptionMiddleware();
 
 
 //CORS Request!
-app.UseCors(builder => builder.WithOrigins("http://localhost:4200", "https://localhost:4200").AllowAnyHeader());
+app.UseCors(builder => builder.WithOrigins("http://localhost:4200").AllowAnyHeader());
 
 
 app.UseHttpsRedirection();
 
-app.UseRouting();
+app.UseRouting(); 
 
 app.UseAuthentication();
 

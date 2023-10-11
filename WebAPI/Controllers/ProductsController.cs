@@ -70,7 +70,7 @@ namespace WebAPI.Controllers
         [HttpGet("getproductdetails")]
         public IActionResult GetProductDetails(int categoryId)
         {
-            var result = _productService.GetProductDetail();
+            var result = _productService.GetProductDetails();
             if (result.Success)
             {
                 return Ok(result);
@@ -93,3 +93,6 @@ namespace WebAPI.Controllers
 
     }
 }
+
+
+//22.05 DERSTEYİZ

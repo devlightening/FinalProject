@@ -4,9 +4,9 @@
     {
         public static string ProductAdded = "Product was Added..!";
         public static string ProductNameInvalid = "Product Name is Invalid..!";
-        public static string MaintainanceTime = "System is Maintenance..!";
+        public static string MaintenanceTime = "System is Maintenance..!";
         public static string ProductsListed = "Product was Listed..!";
-        public static string ProductCountCategoryError = "Category can not more than 15..!";
+        public static string ProductCountOfCategoryError = "Category can not more than 15..!";
 
         public static string ProductUpdated = "Product was Updated..!";
 
