@@ -2,12 +2,8 @@
 using Core.CrossCuttingConcerns.Validation;
 using Core.Utilities.Interceptors;
 using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
-namespace Core.Aspects.Validation
+namespace Core.Aspects.Autofac.Validation
 {
     public class ValidationAspect : MethodInterception //Aspect
     {
@@ -17,7 +13,7 @@ namespace Core.Aspects.Validation
             //defensive coding
             if (!typeof(IValidator).IsAssignableFrom(validatorType))
             {
-                throw new Exception("it is not validation class..!");
+                throw new System.Exception("Bu bir doğrulama sınıfı değil");
             }
 
             _validatorType = validatorType;
@@ -32,5 +28,7 @@ namespace Core.Aspects.Validation
                 ValidationTool.Validate(validator, entity);
             }
         }
+
+
     }
 }
